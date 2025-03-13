@@ -11,7 +11,7 @@ Cilj je ustvariti platformo, ki olajša neposreden stik med kmeti in restavracij
 
 Upravljanje ponudbe izdelkov, ki jih kmetje dodajajo.
 
-Glavne funkcionalnosti:
+Omogoča:
 
 - Dodajanje novega izdelka
 - Pridobitev seznama vseh izdelkov
@@ -19,13 +19,13 @@ Glavne funkcionalnosti:
 - Posodobitev obstoječega izdelka
 - Brisanje izdelka
 
-Komunikacija poteka preko REST API.
+Komunikacija poteka preko gRPC.
 
 ### Upravljanje uporabnikov
 
 Upravljanje s podatki o uporabnikih (kmet ali restavracija), prijava, registracija, avtorizacija.
 
-Glavne funkcionalnosti:
+Omogoča:
 
 - Registracija novega kmeta ali restavracije
 - Pridobitev podatkov uporabnika
@@ -38,7 +38,7 @@ Komunikacija poteka preko REST API.
 
 Upravljanje naročil, povezovanje restavracije z izbranimi izdelki ter posodabljanje statusov naročil.
 
-Glavne funkcionalnosti:
+Omogoča:
 
 - Oddaja novega naročila
 - Pregled posameznega naročila
@@ -46,7 +46,7 @@ Glavne funkcionalnosti:
 - Preklic naročila
 - Pridobitev seznama naročil za določeno restavracijo ali kmeta
 
-Komunikacija poteka preko gRPC zaradi potrebe po hitrosti in streaming-u.
+Komunikacija poteka preko sporočilnega posrednika.
 
 ### Uporabniški vmesnik
 
