@@ -39,13 +39,16 @@ jobs:
       - name: Build Quarkus App
         run: ./mvnw clean package -DskipTests
 
+      - name: List build output directory #!
+        run: ls -R target
+
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: products-offering-build
-          path: target/quarkus-app/
+          path: target/
 
-        
+
   test:
     needs: build
     runs-on: ubuntu-latest
