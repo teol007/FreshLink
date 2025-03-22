@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GrpcServiceTestWithBlockingStubTest {
+class GrpcServiceWithBlockingStubTest {
     private ManagedChannel channel;
     private String productId;
 
