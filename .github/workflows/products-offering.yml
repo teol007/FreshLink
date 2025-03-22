@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: products-offering-build
-          path: target/**/*
+          path: /home/runner/work/FreshLink/FreshLink/products-offering/target/productsOffering-1.0.0-SNAPSHOT.jar
 
 
   test:
