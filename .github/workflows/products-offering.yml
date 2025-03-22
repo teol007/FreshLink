@@ -121,6 +121,9 @@ jobs:
         name: products-offering-build
         path: target/
 
+    - name: List build output directory #!
+      run: ls -R
+
     - name: Build Docker image
       run: |
         docker build -f Dockerfile.jvm -t ${{secrets.DOCKER_USERNAME}}/ita-products-offering:dev .
