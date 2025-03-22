@@ -111,7 +111,7 @@ jobs:
         password: ${{secrets.DOCKER_TOKEN}}
 
     - name: List build output directory #!
-      run: ls -R target/quarkus-app/
+      run: ls -R products-offering/target/quarkus-app/
 
     - name: Build Docker image
       run: |
