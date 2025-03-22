@@ -74,6 +74,9 @@ jobs:
           name: products-offering-build
           path: target/
 
+      - name: List contents of workspace after artifact download #!
+        run: ls -R /home/runner/work/FreshLink/FreshLink/
+
       - name: Cache Maven test dependencies
         uses: actions/cache@v4
         with:
@@ -119,10 +122,10 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: products-offering-build
-        path: target/
+        path: products-offering/target/
 
     - name: List build output directory #!
-      run: ls -R
+      run: ls -R /home/runner/work/FreshLink/FreshLink/
 
     - name: Build Docker image
       run: |
