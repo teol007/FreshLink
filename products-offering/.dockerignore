@@ -1,0 +1,14 @@
+# Ignore Git-related files
+.git/
+.gitignore
+
+# Ignore IDE configuration files
+.idea/
+*.iml
+
+# Ignore logs or other temporary files
+*.log
+*.md
+
+# Other
+.DS_Store
