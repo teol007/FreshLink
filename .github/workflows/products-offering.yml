@@ -43,7 +43,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: products-offering-build
-          path: products-offering/target/productsOffering-1.0.0-SNAPSHOT.jar
+          path: |
+            products-offering/target/productsOffering-1.0.0-SNAPSHOT.jar
+            products-offering/target/quarkus-app/lib/
+            products-offering/target/quarkus-app/*.jar
+            products-offering/target/quarkus-app/app/
+            products-offering/target/quarkus-app/quarkus/
 
 
   test:
@@ -111,7 +116,7 @@ jobs:
         password: ${{secrets.DOCKER_TOKEN}}
 
     - name: List build output directory #!
-      run: ls -R products-offering/target/quarkus-app/
+      run: ls -R target/
 
     - name: Build Docker image
       run: |
