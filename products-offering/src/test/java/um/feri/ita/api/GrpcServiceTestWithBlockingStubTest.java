@@ -14,13 +14,12 @@ import org.junit.jupiter.api.*;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import static org.assertj.core.api.Assertions.as;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class GrpcServiceTestWithBlockingStub {
+class GrpcServiceTestWithBlockingStubTest {
     private ManagedChannel channel;
     private String productId;
 

@@ -39,14 +39,11 @@ jobs:
       - name: Build Quarkus App
         run: ./mvnw clean package -DskipTests
 
-      - name: List build output directory #!
-        run: ls -R target
-
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: products-offering-build
-          path: /home/runner/work/FreshLink/FreshLink/products-offering/target/productsOffering-1.0.0-SNAPSHOT.jar
+          path: products-offering/target/productsOffering-1.0.0-SNAPSHOT.jar
 
 
   test:
@@ -82,5 +79,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: target/surefire-reports/
+          path: products-offering/target/surefire-reports/
 
