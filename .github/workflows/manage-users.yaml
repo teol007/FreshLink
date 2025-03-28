@@ -52,7 +52,7 @@ jobs:
           name: manage-users-build
           path: |
             manage-users/dist/
-            .env
+            manage-users/.env
 
   test:
     needs: build
@@ -86,7 +86,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: manage-users-build
-          path: manage-users/dist/
+          path: manage-users/
 
       - name: Run tests
         run: |
