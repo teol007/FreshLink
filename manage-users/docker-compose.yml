@@ -1,0 +1,29 @@
+services:
+  db:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - "27017:27017"
+    networks:
+      - ita-manage-users-network
+
+  ita-manage-users-service:
+    build: .
+    container_name: ita-manage-users
+    ports:
+      - "3001:3001"
+    environment:
+      - UMS_MONGODB_URL=mongodb://root:password@db:27017
+      - UMS_BASE_URL=http://localhost:3001
+      - UMS_JWT_SECRET_KEY=exampleSecretKey123
+    depends_on:
+      - db
+    networks:
+      - ita-manage-users-network
+
+networks:
+  ita-manage-users-network:
+    driver: bridge

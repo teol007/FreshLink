@@ -1,0 +1,2353 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "v1.0.0",
+    "title": "Manage users",
+    "description": "FreshLink manage users service"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/farmers/": {
+      "get": {
+        "tags": [
+          "Farmers"
+        ],
+        "summary": "Get all farmers",
+        "description": "Returns a list of all farmers",
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of farmers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/farmer"
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/arrayOfFarmers"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Farmers"
+        ],
+        "summary": "Register a new farmer",
+        "description": "Adds a new farmer",
+        "responses": {
+          "200": {
+            "description": "Farmer created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/farmer"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/farmer"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Already exists": {
+                    "value": {
+                      "message": "Email already exists"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Missing required properties": {
+                    "value": {
+                      "message": "All required properties must be defined"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/hiddenSchemas/postFarmer"
+              },
+              "examples": {
+                "example1": {
+                  "$ref": "#/components/examples/postFarmer"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/farmers/{id}": {
+      "get": {
+        "tags": [
+          "Farmers"
+        ],
+        "summary": "Get farmer by id",
+        "description": "Returns farmer object with specified id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Farmer ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with a farmer object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/farmer"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/farmer"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid ID format": {
+                    "value": {
+                      "message": "Id is incorrect"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Object not found": {
+                    "value": {
+                      "message": "Object with id '677164acd5343f0dac83716a' does not exist"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Farmers"
+        ],
+        "summary": "Update a farmer",
+        "description": "Updates an existing farmer's details. Email can not be changed.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Farmer ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Farmer updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/farmer"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/farmer"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid ID format": {
+                    "value": {
+                      "message": "Id is incorrect"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Object not found": {
+                    "value": {
+                      "message": "Object with id '677164acd5343f0dac83716a' does not exist"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Missing required properties": {
+                    "value": {
+                      "message": "All required properties must be defined"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/hiddenSchemas/farmerWithoutId"
+              },
+              "examples": {
+                "example1": {
+                  "$ref": "#/components/examples/farmerWithoutId"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Farmers"
+        ],
+        "summary": "Delete a farmer",
+        "description": "Deletes a farmer",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Farmer ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Farmer successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully deleted"
+                    }
+                  }
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "message": "Successfully deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid ID format": {
+                    "value": {
+                      "message": "Id is incorrect"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Object not found": {
+                    "value": {
+                      "message": "Object with id '677164acd5343f0dac83716a' does not exist"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/farmers/login": {
+      "post": {
+        "tags": [
+          "Farmers"
+        ],
+        "summary": "Login a farmer",
+        "description": "Authenticates a farmer and returns a JWT token and farmer details",
+        "responses": {
+          "200": {
+            "description": "Farmer logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "your-jwt-token"
+                    },
+                    "farmer": {
+                      "$ref": "#/components/schemas/farmer"
+                    }
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/loginFarmerResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid credentials": {
+                    "value": {
+                      "message": "Invalid email or password"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Missing required properties": {
+                    "value": {
+                      "message": "All required properties must be defined"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "example1": {
+                  "summary": "A sample farmer login",
+                  "value": {
+                    "email": "john.doe@example.com",
+                    "password": "password123"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/": {
+      "get": {
+        "tags": [
+          "Restaurants"
+        ],
+        "summary": "Get all restaurants",
+        "description": "Returns a list of all restaurants",
+        "responses": {
+          "200": {
+            "description": "Successful response with a list of restaurants",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/restaurant"
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/arrayOfRestaurants"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Restaurants"
+        ],
+        "summary": "Register a new restaurant",
+        "description": "Adds a new restaurant",
+        "responses": {
+          "200": {
+            "description": "Restaurant created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/restaurant"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/restaurant"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Already exists": {
+                    "value": {
+                      "message": "Email already exists"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Missing required properties": {
+                    "value": {
+                      "message": "All required properties must be defined"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/hiddenSchemas/postRestaurant"
+              },
+              "examples": {
+                "example1": {
+                  "$ref": "#/components/examples/postRestaurant"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/restaurants/{id}": {
+      "get": {
+        "tags": [
+          "Restaurants"
+        ],
+        "summary": "Get restaurant by id",
+        "description": "Returns restaurant object with specified id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Restaurant ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response with a restaurant object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/restaurant"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/restaurant"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid ID format": {
+                    "value": {
+                      "message": "Id is incorrect"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Object not found": {
+                    "value": {
+                      "message": "Object with id '678938800c96e28d11883a6e' does not exist"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Restaurants"
+        ],
+        "summary": "Update a restaurant",
+        "description": "Updates an existing restaurant's details. Email can not be changed.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Restaurant ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restaurant updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/restaurant"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/restaurant"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid ID format": {
+                    "value": {
+                      "message": "Id is incorrect"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Object not found": {
+                    "value": {
+                      "message": "Object with id '678938800c96e28d11883a6e' does not exist"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Missing required properties": {
+                    "value": {
+                      "message": "All required properties must be defined"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/hiddenSchemas/restaurantWithoutId"
+              },
+              "examples": {
+                "example1": {
+                  "$ref": "#/components/examples/restaurantWithoutId"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Restaurants"
+        ],
+        "summary": "Delete a restaurant",
+        "description": "Deletes a restaurant",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Restaurant ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restaurant successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully deleted"
+                    }
+                  }
+                },
+                "examples": {
+                  "Success": {
+                    "value": {
+                      "message": "Successfully deleted"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid ID format": {
+                    "value": {
+                      "message": "Id is incorrect"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "No token": {
+                    "value": {
+                      "message": "No token provided"
+                    }
+                  },
+                  "JWT payload": {
+                    "value": {
+                      "message": "Cannot parse JWT payload"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Bad token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  },
+                  "Role": {
+                    "value": {
+                      "message": "Your role does not have access"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Object not found": {
+                    "value": {
+                      "message": "Object with id '678938800c96e28d11883a6e' does not exist"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/restaurants/login": {
+      "post": {
+        "tags": [
+          "Restaurants"
+        ],
+        "summary": "Login a restaurant",
+        "description": "Authenticates a restaurant and returns a JWT token and restaurant details",
+        "responses": {
+          "200": {
+            "description": "Restaurant logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "your-jwt-token"
+                    },
+                    "restaurant": {
+                      "$ref": "#/components/schemas/restaurant"
+                    }
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/loginRestaurantResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid credentials": {
+                    "value": {
+                      "message": "Invalid email or password"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Missing required properties": {
+                    "value": {
+                      "message": "All required properties must be defined"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "example1": {
+                  "summary": "A sample restaurant login",
+                  "value": {
+                    "email": "evala@example.com",
+                    "password": "pass123"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tokens/authenticate": {
+      "post": {
+        "tags": [
+          "Tokens"
+        ],
+        "summary": "Authenticates token",
+        "description": "Authenticates JWT token and returns data from token",
+        "responses": {
+          "200": {
+            "description": "Token is valid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "role": {
+                      "type": "string",
+                      "example": "farmer"
+                    },
+                    "object": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/farmer"
+                        },
+                        {
+                          "$ref": "#/components/schemas/restaurant"
+                        },
+                        {
+                          "$ref": "#/components/hiddenSchemas/user"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/authenticateFarmer"
+                  },
+                  "example2": {
+                    "$ref": "#/components/examples/authenticateRestaurant"
+                  },
+                  "example3": {
+                    "$ref": "#/components/examples/authenticateUser"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Fake token": {
+                    "value": {
+                      "message": "Token does not belong to the user"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Token": {
+                    "value": {
+                      "message": "Invalid or expired token"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "example1": {
+                  "summary": "A sample token",
+                  "value": {
+                    "token": "your-jwt-token"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Login admin",
+        "description": "Authenticates a admin and returns a JWT token and admin details",
+        "responses": {
+          "200": {
+            "description": "Admin logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string",
+                      "example": "your-jwt-token"
+                    },
+                    "user": {
+                      "$ref": "#/components/hiddenSchemas/user"
+                    }
+                  }
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/loginUserResponse"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "Invalid credentials": {
+                    "value": {
+                      "message": "Invalid email or password"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error"
+                },
+                "examples": {
+                  "example1": {
+                    "$ref": "#/components/examples/error500"
+                  }
+                }
+              }
+            },
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "example1": {
+                  "summary": "A sample farmer login",
+                  "value": {
+                    "email": "admin@example.com",
+                    "password": "strong-password"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Get the token from login endpoints"
+      }
+    },
+    "schemas": {
+      "location": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "place": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "1424 Cornwall Ave, Bellingham"
+                  }
+                }
+              },
+              "postCode": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "98225 WA"
+                  }
+                }
+              },
+              "country": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "USA"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "farmer": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "677164acd5343f0dac83716a"
+                  }
+                }
+              },
+              "email": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                  }
+                }
+              },
+              "farmName": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Doe's Farm"
+                  }
+                }
+              },
+              "description": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "A nice farm"
+                  }
+                }
+              },
+              "name": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "John"
+                  }
+                }
+              },
+              "surname": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Doe"
+                  }
+                }
+              },
+              "location": {
+                "$ref": "#/components/schemas/location"
+              }
+            }
+          }
+        }
+      },
+      "restaurant": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "678938800c96e28d11883a6e"
+                  }
+                }
+              },
+              "email": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "evala@example.com"
+                  }
+                }
+              },
+              "name": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Evala"
+                  }
+                }
+              },
+              "description": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "A cozy spot offering delicious food."
+                  }
+                }
+              },
+              "location": {
+                "$ref": "#/components/schemas/location"
+              },
+              "phoneNumber": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "+123456789012"
+                  }
+                }
+              },
+              "rating": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "number"
+                  },
+                  "example": {
+                    "type": "number",
+                    "example": 4.5
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "error": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "object"
+          },
+          "properties": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "example": "string"
+                  },
+                  "example": {
+                    "type": "string",
+                    "example": "Example error message"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "hiddenSchemas": {
+      "postFarmer": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          },
+          "farmName": {
+            "type": "string",
+            "example": "Doe's Farm"
+          },
+          "description": {
+            "type": "string",
+            "example": "A nice farm"
+          },
+          "name": {
+            "type": "string",
+            "example": "John"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "location": {
+            "$ref": "#/components/schemas/location"
+          }
+        }
+      },
+      "farmerWithoutId": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john.doe@example.com"
+          },
+          "farmName": {
+            "type": "string",
+            "example": "Doe's Farm"
+          },
+          "description": {
+            "type": "string",
+            "example": "A nice farm"
+          },
+          "name": {
+            "type": "string",
+            "example": "John"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "location": {
+            "$ref": "#/components/schemas/location"
+          }
+        }
+      },
+      "postRestaurant": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "evala@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "pass123"
+          },
+          "name": {
+            "type": "string",
+            "example": "Evala"
+          },
+          "description": {
+            "type": "string",
+            "example": "A cozy spot offering delicious food."
+          },
+          "location": {
+            "$ref": "#/components/schemas/location"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "+123456789012"
+          },
+          "rating": {
+            "type": "number",
+            "example": 4.5
+          }
+        }
+      },
+      "restaurantWithoutId": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "evala@example.com"
+          },
+          "name": {
+            "type": "string",
+            "example": "Evala"
+          },
+          "description": {
+            "type": "string",
+            "example": "A cozy spot offering delicious food."
+          },
+          "location": {
+            "$ref": "#/components/schemas/location"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "example": "+123456789012"
+          },
+          "rating": {
+            "type": "number",
+            "example": 4.5
+          }
+        }
+      },
+      "user": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "677164acd5343f0dac83716a"
+          },
+          "email": {
+            "type": "string",
+            "example": "admin@example.com"
+          },
+          "role": {
+            "type": "string",
+            "example": "admin"
+          },
+          "name": {
+            "type": "string",
+            "example": "Alice"
+          },
+          "surname": {
+            "type": "string",
+            "example": "Smith"
+          },
+          "location": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/location"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "examples": {
+      "postFarmer": {
+        "summary": "A sample input farmer object",
+        "value": {
+          "email": "john.doe@example.com",
+          "password": "password123",
+          "farmName": "Doe's Farm",
+          "description": "A nice farm.",
+          "name": "John",
+          "surname": "Doe",
+          "location": {
+            "place": "3124 MontvaleDr, Springfield",
+            "postCode": "62704 IL",
+            "country": "USA"
+          }
+        }
+      },
+      "farmer": {
+        "summary": "A sample farmer object",
+        "value": {
+          "_id": "677164acd5343f0dac83716a",
+          "email": "john.doe@example.com",
+          "farmName": "Doe's Farm",
+          "description": "A nice farm.",
+          "name": "John",
+          "surname": "Doe",
+          "location": {
+            "place": "3124 MontvaleDr, Springfield",
+            "postCode": "62704 IL",
+            "country": "USA"
+          }
+        }
+      },
+      "farmerWithoutId": {
+        "summary": "A sample farmer object",
+        "value": {
+          "email": "john.doe@example.com",
+          "farmName": "Doe's Farm",
+          "description": "A nice farm.",
+          "name": "John",
+          "surname": "Doe",
+          "location": {
+            "place": "3124 MontvaleDr, Springfield",
+            "postCode": "62704 IL",
+            "country": "USA"
+          }
+        }
+      },
+      "arrayOfFarmers": {
+        "summary": "A sample array of farmer objects",
+        "value": [
+          {
+            "_id": "677164acd5343f0dac83716a",
+            "email": "john.doe@example.com",
+            "farmName": "Doe's Farm",
+            "description": "A nice farm.",
+            "name": "John",
+            "surname": "Doe",
+            "location": {
+              "place": "3124 MontvaleDr, Springfield",
+              "postCode": "62704 IL",
+              "country": "USA"
+            }
+          }
+        ]
+      },
+      "loginFarmerResponse": {
+        "summary": "A sample farmer login response",
+        "value": {
+          "token": "your-jwt-token",
+          "farmer": {
+            "_id": "677164acd5343f0dac83716a",
+            "email": "john.doe@example.com",
+            "farmName": "Doe's Farm",
+            "description": "A nice farm.",
+            "name": "John",
+            "surname": "Doe",
+            "location": {
+              "place": "3124 MontvaleDr, Springfield",
+              "postCode": "62704 IL",
+              "country": "USA"
+            }
+          }
+        }
+      },
+      "authenticateFarmer": {
+        "summary": "Response with role and farmer object",
+        "value": {
+          "role": "farmer",
+          "object": {
+            "_id": "677164acd5343f0dac83716a",
+            "email": "john.doe@example.com",
+            "farmName": "Doe's Farm",
+            "description": "A nice farm.",
+            "name": "John",
+            "surname": "Doe",
+            "location": {
+              "place": "3124 MontvaleDr, Springfield",
+              "postCode": "62704 IL",
+              "country": "USA"
+            }
+          }
+        }
+      },
+      "postRestaurant": {
+        "summary": "A sample input restaurant object",
+        "value": {
+          "email": "evala@example.com",
+          "password": "pass123",
+          "name": "Evala",
+          "description": "A cozy spot offering delicious food.",
+          "location": {
+            "place": "201 N Walker Ave, Oklahoma City",
+            "postCode": "73102 OK",
+            "country": "USA"
+          },
+          "phoneNumber": "+123456789012",
+          "rating": 4.5
+        }
+      },
+      "restaurant": {
+        "summary": "A sample restaurant object",
+        "value": {
+          "_id": "678938800c96e28d11883a6e",
+          "email": "evala@example.com",
+          "name": "Evala",
+          "description": "A cozy spot offering delicious food.",
+          "location": {
+            "place": "201 N Walker Ave, Oklahoma City",
+            "postCode": "73102 OK",
+            "country": "USA"
+          },
+          "phoneNumber": "+123456789012",
+          "rating": 4.5
+        }
+      },
+      "restaurantWithoutId": {
+        "summary": "A sample restaurant object",
+        "value": {
+          "email": "evala@example.com",
+          "name": "Evala",
+          "description": "A cozy spot offering delicious food.",
+          "location": {
+            "place": "201 N Walker Ave, Oklahoma City",
+            "postCode": "73102 OK",
+            "country": "USA"
+          },
+          "phoneNumber": "+123456789012",
+          "rating": 4.5
+        }
+      },
+      "arrayOfRestaurants": {
+        "summary": "A sample array of restaurant objects",
+        "value": [
+          {
+            "_id": "678938800c96e28d11883a6e",
+            "email": "evala@example.com",
+            "name": "Evala",
+            "description": "A cozy spot offering delicious food.",
+            "location": {
+              "place": "201 N Walker Ave, Oklahoma City",
+              "postCode": "73102 OK",
+              "country": "USA"
+            },
+            "phoneNumber": "+123456789012",
+            "rating": 4.5
+          }
+        ]
+      },
+      "loginRestaurantResponse": {
+        "summary": "A sample restaurant login response",
+        "value": {
+          "token": "your-jwt-token",
+          "restaurant": {
+            "_id": "678938800c96e28d11883a6e",
+            "email": "evala@example.com",
+            "name": "Evala",
+            "description": "A cozy spot offering delicious food.",
+            "location": {
+              "place": "201 N Walker Ave, Oklahoma City",
+              "postCode": "73102 OK",
+              "country": "USA"
+            },
+            "phoneNumber": "+123456789012",
+            "rating": 4.5
+          }
+        }
+      },
+      "authenticateRestaurant": {
+        "summary": "Response with role and restaurant object",
+        "value": {
+          "role": "restaurant",
+          "object": {
+            "_id": "678938800c96e28d11883a6e",
+            "email": "evala@example.com",
+            "name": "Evala",
+            "description": "A cozy spot offering delicious food.",
+            "location": {
+              "place": "201 N Walker Ave, Oklahoma City",
+              "postCode": "73102 OK",
+              "country": "USA"
+            },
+            "phoneNumber": "+123456789012",
+            "rating": 4.5
+          }
+        }
+      },
+      "loginUserResponse": {
+        "summary": "A sample login response",
+        "value": {
+          "token": "your-jwt-token",
+          "user": {
+            "_id": "295394acd5343f0dac837163",
+            "email": "admin@example.com",
+            "role": "admin",
+            "name": "Alice",
+            "surname": "Smith",
+            "location": {
+              "place": "500 E Memorial Rd, Oklahoma City",
+              "postCode": "73114 OK",
+              "country": "USA"
+            }
+          }
+        }
+      },
+      "authenticateUser": {
+        "summary": "Response with role and user object",
+        "value": {
+          "role": "admin",
+          "object": {
+            "_id": "295394acd5343f0dac837163",
+            "email": "admin@example.com",
+            "role": "admin",
+            "name": "Alice",
+            "surname": "Smith",
+            "location": {
+              "place": "500 E Memorial Rd, Oklahoma City",
+              "postCode": "73114 OK",
+              "country": "USA"
+            }
+          }
+        }
+      },
+      "error500": {
+        "summary": "Server error",
+        "value": {
+          "message": "Internal Server Error"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}
