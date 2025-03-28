@@ -8,6 +8,12 @@ on:
     branches:
       - main
 
+env:
+  UMS_MONGODB_URL: ${{ secrets.UMS_MONGODB_URL }}
+  UMS_BASE_URL: ${{ secrets.UMS_BASE_URL }}
+  UMS_JWT_SECRET_KEY: ${{ secrets.UMS_JWT_SECRET_KEY }}
+  UMS_CORS_ALLOW_URL: ${{ secrets.UMS_CORS_ALLOW_URL }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,12 +42,6 @@ jobs:
         run: |
           npm ci
 
-      - name: Create .env file
-        run: |
-          echo "UMS_MONGODB_URL=${{ secrets.UMS_MONGODB_URL }}" > .env
-          echo "UMS_BASE_URL=${{ secrets.UMS_BASE_URL }}" >> .env
-          echo "UMS_JWT_SECRET_KEY=${{ secrets.UMS_JWT_SECRET_KEY }}" >> .env
-
       - name: Build TypeScript code
         run: |
           npm run build
@@ -50,9 +50,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: manage-users-build
-          path: |
-            manage-users/dist/
-            manage-users/.env
+          path: manage-users/dist/
 
   test:
     needs: build
@@ -86,7 +84,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: manage-users-build
-          path: manage-users/
+          path: manage-users/dist/
 
       - name: Run tests
         run: |
