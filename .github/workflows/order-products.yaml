@@ -32,7 +32,7 @@ jobs:
       - name: Run tests
         run: |
           cd order-products
-          poetry run pytest
+          poetry run python tests\run_tests.py
 
   dockerize-and-push-dev:
     needs: test
