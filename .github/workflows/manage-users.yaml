@@ -116,10 +116,10 @@ jobs:
 
     - name: Build Docker image
       run: |
-        docker build -t ${{secrets.DOCKER_USERNAME}}/ita-manage-users .
-        docker tag ${{secrets.DOCKER_USERNAME}}/ita-manage-users ${{secrets.DOCKER_USERNAME}}/ita-manage-users:${{github.sha}}
+        docker build -t ${{secrets.DOCKER_USERNAME}}/ita-manage-users:dev .
+        docker tag ${{secrets.DOCKER_USERNAME}}/ita-manage-users:dev ${{secrets.DOCKER_USERNAME}}/ita-manage-users:${{github.sha}}
 
     - name: Push Docker image to Docker Hub
       run: |
-        docker push ${{secrets.DOCKER_USERNAME}}/ita-manage-users
+        docker push ${{secrets.DOCKER_USERNAME}}/ita-manage-users:dev
         docker push ${{secrets.DOCKER_USERNAME}}/ita-manage-users:${{github.sha}}

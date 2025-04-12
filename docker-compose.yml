@@ -1,0 +1,59 @@
+services:
+  ita-products-offering-db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: ita_products_offering
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+    networks:
+      - ita-network
+
+  ita-products-offering-service:
+    image: shipjustdocked/ita-products-offering:dev
+    environment:
+      - DB_JDBC_URL=jdbc:mysql://ita-products-offering-db:3306/ita_products_offering
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+    ports:
+      - "9000:9000"
+    depends_on:
+      ita-products-offering-db:
+        condition: service_healthy
+    networks:
+      - ita-network
+
+  ita-manage-users-db:
+    image: mongo:latest
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    ports:
+      - "27017:27017"
+    networks:
+      - ita-network
+
+  ita-manage-users-service:
+    image: shipjustdocked/ita-manage-users:dev
+    container_name: ita-manage-users
+    ports:
+      - "3001:3001"
+    environment:
+      - UMS_MONGODB_URL=mongodb://root:password@ita-manage-users-db:27017
+      - UMS_BASE_URL=http://localhost:3001
+      - UMS_JWT_SECRET_KEY=exampleSecretKey123
+    depends_on:
+      - ita-manage-users-db
+    networks:
+      - ita-network
+
+networks:
+  ita-network:
+    driver: bridge

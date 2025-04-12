@@ -1,0 +1,36 @@
+services:
+  mongo-order-products:
+    image: mongo:latest
+    container_name: mongo-order-products
+    ports:
+      - "28017:27017"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # AMQP protocol
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+
+  order-products:
+    build: .
+    container_name: ita-order-products
+    depends_on:
+      mongo-order-products:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      OPS_MONGODB_URL: mongodb://mongo-order-products:27017
+      OPS_MESSAGE_QUEUE_URL: rabbitmq
