@@ -1,7 +1,7 @@
 services:
-  mongo-order-products:
+  ita-order-products-db:
     image: mongo:latest
-    container_name: mongo-order-products
+    container_name: ita-order-products-db
     ports:
       - "28017:27017"
 
@@ -21,16 +21,16 @@ services:
       start_period: 10s
       timeout: 5s
 
-  order-products:
+  ita-order-products:
     build: .
     container_name: ita-order-products
     depends_on:
-      mongo-order-products:
+      ita-order-products-db:
         condition: service_started
       rabbitmq:
         condition: service_healthy
     ports:
       - "5000:5000"
     environment:
-      OPS_MONGODB_URL: mongodb://mongo-order-products:27017
+      OPS_MONGODB_URL: mongodb://ita-order-products-db:27017
       OPS_MESSAGE_QUEUE_URL: rabbitmq

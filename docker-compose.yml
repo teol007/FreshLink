@@ -31,7 +31,7 @@ services:
 
   ita-manage-users-db:
     image: mongo:latest
-    container_name: mongo
+    container_name: ita-manage-users-db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=password
@@ -51,6 +51,48 @@ services:
       - UMS_JWT_SECRET_KEY=exampleSecretKey123
     depends_on:
       - ita-manage-users-db
+    networks:
+      - ita-network
+
+  ita-order-products-db:
+    image: mongo:latest
+    container_name: ita-order-products-db
+    ports:
+      - "28017:27017"
+    networks:
+      - ita-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # AMQP protocol
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+    networks:
+      - ita-network
+
+  ita-order-products:
+    image: shipjustdocked/ita-order-products:dev
+    container_name: ita-order-products
+    depends_on:
+      ita-order-products-db:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      OPS_MONGODB_URL: mongodb://ita-order-products-db:27017
+      OPS_MESSAGE_QUEUE_URL: rabbitmq
     networks:
       - ita-network
 
