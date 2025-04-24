@@ -96,6 +96,26 @@ services:
     networks:
       - ita-network
 
+  ita-web-bff:
+    image: shipjustdocked/ita-web-bff:dev
+    container_name: ita-web-bff
+    ports:
+      - "3002:3002"
+    environment:
+      - WBFF_BASE_URL=http://localhost:3002
+      - WBFF_CORS_ALLOW_URL=http://localhost:5173
+      - WBFF_MANAGE_USERS_SERVICE_BASE_URL=http://ita-manage-users-service:3001
+      - WBFF_PRODUCTS_OFFERING_SERVICE_BASE_URL=ita-products-offering-service:9000
+      - WBFF_ORDER_PRODUCTS_SERVICE_REST_BASE_URL=http://ita-order-products:5000
+      - WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_URL=rabbitmq
+      - WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_NAME=orders
+    depends_on:
+      - ita-products-offering-service
+      - ita-manage-users-service
+      - ita-order-products
+    networks:
+      - ita-network
+
 networks:
   ita-network:
     driver: bridge

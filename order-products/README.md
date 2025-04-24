@@ -33,4 +33,28 @@
     ]
   }
 }
+
+{
+  "action": "update",
+  "order": {
+    "_id": "67f9899c5be73585d33d44ae",
+    "restaurant_id": "restaurant12345",
+    "farmer_id": "farmer456",
+    "products": [
+      {
+        "product_id": "apple00123",
+        "quantity": 105.5
+      },
+      {
+        "product_id": "banana002",
+        "quantity": 7.2
+      }
+    ]
+  }
+}
+
+{
+  "action": "delete",
+  "order_id": "67f9899c5be73585d33d44ae"
+}
 ```
