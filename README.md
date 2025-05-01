@@ -1,9 +1,16 @@
 ﻿# FreshLink
 
+## Vzpostavitev
+
+1. `docker compose up -d`
+
+
 ## Opis
+
 Spletna platforma, ki bo restavracijam omogočala neposreden nakup svežih, lokalnih živil od okoliških kmetov. Lokalni kmetje bodo lahko objavljali svojo ponudbo izdelkov (sadje, zelenjava, mesni izdelki, mlečni izdelki ipd.), restavracije pa bodo to ponudbo lahko pregledovale, filtrirale in naročale izdelke. Sistem bo vzpostavljen kot nabor mikrostoritev.
 
 Cilj je ustvariti platformo, ki olajša neposreden stik med kmeti in restavracijami ter povečati uporabo lokalno pridelane hrane v restavracijah.
+
 
 ## Storitve
 
@@ -66,3 +73,5 @@ Storitev za upravljanje uporabnikov <--> Storitev za naročanje izdelkov: storit
 Storitev za ponudbe izdelkov <--> Storitev za naročanje izdelkov: storitev za naročanje izdelkov preveri ali so izdelki razpoložljivi in opravi naročilo izdelkov (od kmeta do restavracije).
 
 Uporabniški vmesnik <--> (Storitev za ponudbe izdelkov, storitev za upravljanje uporabnikov, storitev za naročanje izdelkov): na enostaven in uporabniku lep način omogoči funkcionalnosti omenjenih storitev.
+
+Kasneje je bilo odločeno, da bo komunikacija med mikrostoritvami potekala preko BFF-jev (backend for frontend) in ne direktno med osnovnimi mikrostoritvami.

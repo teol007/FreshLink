@@ -1,7 +1,7 @@
 # FreshLink - storitev za naročanje izdelkov
 
 ## Predpostavke
-- Inštaliran Python verzije (glej datoteko `.python-version`)
+- Inštaliran Python verzije (glej datoteko `.python-version`) (pyenv)
 - Inštaliran [poetry](https://python-poetry.org): `pipx install poetry`
 - Inštaliran in zagnan RabbitMQ. Primer: `docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management` (uporabniško ime: guest, geslo: guest)
 - Inštalirana in zagnana MongoDB podatkovna baza
@@ -13,8 +13,14 @@
 
 - Testiranje: `poetry run python tests\run_tests.py`
 
-## Primer sporočila
-```
+## Docker
+
+1. Premik v mapo: `cd order-products` 
+2. Zagon storitve: `docker compose up -d`
+
+
+## Primer sporočil
+```JSON
 {
   "action": "create",
   "order": {
@@ -33,7 +39,8 @@
     ]
   }
 }
-
+```
+```JSON
 {
   "action": "update",
   "order": {
@@ -52,7 +59,8 @@
     ]
   }
 }
-
+```
+```JSON
 {
   "action": "delete",
   "order_id": "67f9899c5be73585d33d44ae"

@@ -1,0 +1,19 @@
+services:
+  ita-mobile-bff:
+    build: .
+    container_name: ita-mobile-bff
+    ports:
+      - "5001:5001"
+    environment:
+      - MBFF_BASE_URL=http://0.0.0.0:5001
+      - MBFF_MANAGE_USERS_SERVICE_BASE_URL=http://localhost:3001
+      - MBFF_PRODUCTS_OFFERING_SERVICE_BASE_URL=localhost:9000
+      - MBFF_ORDER_PRODUCTS_SERVICE_REST_BASE_URL=http://localhost:5000
+      - MBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_URL=localhost
+      - MBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_NAME=orders
+    networks:
+      - ita-mobile-bff-network
+
+networks:
+  ita-mobile-bff-network:
+    driver: bridge

@@ -1,0 +1,37 @@
+name: Mobile BFF CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dockerize-and-push-dev:
+    runs-on: ubuntu-latest
+    environment: development
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{secrets.DOCKER_USERNAME}}
+        password: ${{secrets.DOCKER_TOKEN}}
+
+    - name: Build Docker image
+      run: |
+        cd mobile-bff
+        docker build -t ${{secrets.DOCKER_USERNAME}}/ita-mobile-bff:dev .
+        docker tag ${{secrets.DOCKER_USERNAME}}/ita-mobile-bff:dev ${{secrets.DOCKER_USERNAME}}/ita-mobile-bff:${{github.sha}}
+
+    - name: Push Docker image to Docker Hub
+      run: |
+        cd mobile-bff
+        docker push ${{secrets.DOCKER_USERNAME}}/ita-mobile-bff:dev
+        docker push ${{secrets.DOCKER_USERNAME}}/ita-mobile-bff:${{github.sha}}
