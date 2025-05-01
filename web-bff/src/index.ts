@@ -24,10 +24,19 @@ export async function startServer() {
     const baseUrlText = baseUrl;
     const baseServiceUrl = new URL(baseUrlText ?? "http://localhost:3002");
     
-    app.use(cors({
+    /* app.use(cors({
       origin: process.env.WBFF_CORS_ALLOW_URL,
       credentials: true,
+    })); */
+
+    
+    app.use(cors({
+      origin: (origin, callback) => {
+        callback(null, origin);
+      },
+      credentials: true,
     }));
+
     app.use(express.json());
     app.use('/farmers', farmersRouter);
     app.use('/restaurants', restaurantsRouter);
