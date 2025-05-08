@@ -1,0 +1,5 @@
+services:
+  ita-portal-mf:
+    build: .
+    ports:
+      - "3010:3010"

@@ -135,6 +135,37 @@ services:
     networks:
       - ita-network
 
+  ita-manage-users-mf:
+    image: shipjustdocked/ita-manage-users-mf:dev
+    container_name: ita-manage-users-mf
+    ports:
+      - "3011:3011"
+    depends_on:
+      - ita-web-bff
+    networks:
+      - ita-network
+
+  ita-products-offering-mf:
+    image: shipjustdocked/ita-products-offering-mf:dev
+    container_name: ita-products-offering-mf
+    ports:
+      - "3012:3012"
+    depends_on:
+      - ita-web-bff
+    networks:
+      - ita-network
+
+  ita-portal-mf:
+    image: shipjustdocked/ita-portal-mf:dev
+    container_name: ita-portal-mf
+    ports:
+      - "3010:3010"
+    depends_on:
+      - ita-manage-users-mf
+      - ita-products-offering-mf
+    networks:
+      - ita-network
+
 networks:
   ita-network:
     driver: bridge

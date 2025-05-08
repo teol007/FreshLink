@@ -1,0 +1,5 @@
+services:
+  ita-manage-users-mf:
+    build: .
+    ports:
+      - "3011:3011"
