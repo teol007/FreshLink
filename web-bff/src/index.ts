@@ -18,7 +18,7 @@ dotenv.config();
 export async function startServer() {
   try {
     await connectOrderProductsServiceMQ();
-    console.log("Connected to 'Order Products Service' message queue.")
+    console.log("Connected to 'Order Products Service' and 'Audit logs' message queue.")
 
     const app = express();
     const baseUrlText = baseUrl;

@@ -109,6 +109,7 @@ services:
       - WBFF_ORDER_PRODUCTS_SERVICE_REST_BASE_URL=http://ita-order-products:5000
       - WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_URL=rabbitmq
       - WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_NAME=orders
+      - WBFF_AUDIT_LOG_MSQUEUE_NAME=audit_logs
     depends_on:
       - ita-products-offering-service
       - ita-manage-users-service

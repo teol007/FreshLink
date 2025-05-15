@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { authorizeRoles } from "../../modules/middleware/authorizationJWT";
 import { JwtUserRole } from "../../modules/interfaces/jwtPayload";
 import { manageUsersBaseUrl } from "../../modules/config";
+import { publishToQueueAuditLogs } from "../../modules/clients/orderProductsService/orderProductsRabbitMQ";
 
 const router = Router();
 
@@ -15,8 +16,8 @@ router.get('/', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.RESTAURANT, JwtUs
   // #swagger.responses[200] = {description: "Successful response with a list of restaurants", content: {"application/json": {schema: {type: "array", items: {$ref: '#/components/schemas/restaurant'}}, examples: {example1: {$ref: '#/components/examples/arrayOfRestaurants'}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
     
-  console.log(`GET /restaurants endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /restaurants endpoint was called from ip ${req.ip}`);
     const response = await fetch(restaurantsUrl, {
       method: "GET",
       headers: {
@@ -45,8 +46,8 @@ router.get('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.RESTAURANT]), 
   // #swagger.responses[400] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid ID format": {value: {message: "Id is incorrect"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
   
-  console.log(`GET /restaurants/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /restaurants/${req.params.id} endpoint was called from ip ${req.ip}`);
     const response = await fetch(restaurantsUrl+"/"+req.params.id, {
       method: "GET",
       headers: {
@@ -83,8 +84,8 @@ router.post('/', async (req: Request, res: Response): Promise<any> => {
   // #swagger.responses[409] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Already exists": {value: {message: "Email already exists"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
   
-  console.log(`POST /restaurants endpoint was called`);
   try {
+    publishToQueueAuditLogs(`POST /restaurants endpoint was called from ip ${req.ip}`);
     const response = await fetch(restaurantsUrl, {
       method: "POST",
       headers: {
@@ -124,8 +125,8 @@ router.put('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.RESTAURANT]), 
   // #swagger.responses[400] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid ID format": {value: {message: "Id is incorrect"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
   
-  console.log(`PUT /restaurants/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`PUT /restaurants/${req.params.id} endpoint was called from ip ${req.ip}`);
     const response = await fetch(restaurantsUrl+"/"+req.params.id, {
       method: "PUT",
       headers: {
@@ -155,8 +156,8 @@ router.delete('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.RESTAURANT]
   // #swagger.responses[400] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid ID format": {value: {message: "Id is incorrect"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
 
-  console.log(`DELETE /restaurants/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`DELETE /restaurants/${req.params.id} endpoint was called from ip ${req.ip}`);
     const response = await fetch(restaurantsUrl+"/"+req.params.id, {
       method: "DELETE",
       headers: {
@@ -201,8 +202,8 @@ router.post('/login', async (req: Request, res: Response): Promise<any> => {
   // #swagger.responses[401] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid credentials": {value: {message: "Invalid email or password"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
 
-  console.log(`GET /restaurants/login endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /restaurants/login endpoint was called from ip ${req.ip}`);
     const response = await fetch(restaurantsUrl+"/login", {
       method: "POST",
       headers: {

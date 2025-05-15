@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import { authorizeRoles } from "../../modules/middleware/authorizationJWT";
 import { JwtUserRole } from "../../modules/interfaces/jwtPayload";
 import { manageUsersBaseUrl, orderProductsRestBaseUrl } from "../../modules/config";
-import { publishToQueueOrderProductsService } from "../../modules/clients/orderProductsService/orderProductsRabbitMQ";
+import { publishToQueueAuditLogs, publishToQueueOrderProductsService } from "../../modules/clients/orderProductsService/orderProductsRabbitMQ";
 import { productsClient } from "../../modules/clients/productsOfferingService/productsOfferingGrpc";
 
 const router = Router();
@@ -15,8 +15,8 @@ router.get('/', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUserRo
   // #swagger.tags = ["Orders"]
   // #swagger.responses[200] = { description: "Successful response"}
   
-  console.log(`GET /orders endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /orders endpoint was called from ip ${req.ip}`)
     const response = await fetch(ordersRestUrl, {
       method: "GET",
       headers: {
@@ -39,8 +39,8 @@ router.get('/allInfo', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, Jw
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[503]
   
-  console.log(`GET /orders/allInfo endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /orders/allInfo endpoint was called from ip ${req.ip}`)
     const usersBaseUrl = `${manageUsersBaseUrl}`;
 
     const ordersResponse = await fetch(ordersRestUrl, {
@@ -109,8 +109,8 @@ router.get('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUse
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[404]
   
-  console.log(`GET /orders/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /orders/${req.params.id} endpoint was called from ip ${req.ip}`)
     const response = await fetch(ordersRestUrl+"/"+req.params.id, {
       method: "GET",
       headers: {
@@ -155,8 +155,8 @@ router.post('/', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUserR
     } */
   // #swagger.responses[200] = { description: "Successfully sent request for further processing"}
   
-  console.log(`POST /orders endpoint was called`);
   try {
+    publishToQueueAuditLogs("POST /orders endpoint was called from ip "+req.ip)
     publishToQueueOrderProductsService({action: "create", order: req.body})
     res.status(200).json({ message: 'Successfully sent request for further processing' });
   } catch (err) {
@@ -194,8 +194,8 @@ router.put('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER]), asyn
     } */
   // #swagger.responses[200] = { description: "Successfully sent request for further processing"}
   
-  console.log(`PUT /orders/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`PUT /orders/${req.params.id} endpoint was called from ip ${req.ip}`)
     req.body._id = req.params.id;
     publishToQueueOrderProductsService({action: "update", order: req.body})
     res.status(200).json({ message: 'Successfully sent request for further processing' });
@@ -212,8 +212,8 @@ router.delete('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, Jwt
   // #swagger.parameters['id'] = { description: "Order ID", required: true, type: "string" }
   // #swagger.responses[200] = { description: "Successfully sent request for further processing"}
   
-  console.log(`DELETE /orders/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`DELETE /orders/${req.params.id} endpoint was called from ip ${req.ip}`)
     publishToQueueOrderProductsService({action: "delete", order_id: req.params.id})
     res.status(200).json({ message: 'Successfully sent request for further processing' });
   } catch (err) {

@@ -24,3 +24,7 @@ if(!orderProductsMsQueueBaseUrl)
 export const orderProductsMsQueueName = process.env.WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_NAME;
 if(!orderProductsMsQueueName)
   throw new Error("Envirmental variable WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_NAME not set.");
+
+export const auditLogsMsQueueName = process.env.WBFF_AUDIT_LOG_MSQUEUE_NAME;
+if(!auditLogsMsQueueName)
+  throw new Error("Envirmental variable WBFF_AUDIT_LOG_MSQUEUE_NAME not set.");

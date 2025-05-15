@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { manageUsersBaseUrl } from "../../modules/config";
 import { JwtUserRole } from "../../modules/interfaces/jwtPayload";
 import { authorizeRoles } from "../../modules/middleware/authorizationJWT";
+import { publishToQueueAuditLogs } from "../../modules/clients/orderProductsService/orderProductsRabbitMQ";
 
 const router = Router();
 
@@ -14,8 +15,8 @@ router.get('/allUsers', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, J
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[503]
   
-  console.log(`GET /grouped endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /grouped endpoint was called from ip ${req.ip}`);
     const farmerResponse = await fetch(usersBaseUrl+"/farmers", {
       method: "GET",
       headers: {

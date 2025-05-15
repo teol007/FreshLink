@@ -2,6 +2,7 @@ import { Request, Response, Router } from "express";
 import { authorizeRoles } from "../../modules/middleware/authorizationJWT";
 import { JwtUserRole } from "../../modules/interfaces/jwtPayload";
 import { manageUsersBaseUrl } from "../../modules/config";
+import { publishToQueueAuditLogs } from "../../modules/clients/orderProductsService/orderProductsRabbitMQ";
 
 const router = Router();
 
@@ -16,8 +17,8 @@ router.get('/', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUserRo
   // #swagger.responses[200] = {description: "Successful response with a list of farmers", content: {"application/json": {schema: {type: "array", items: {$ref: '#/components/schemas/farmer'}}, examples: {example1: {$ref: '#/components/examples/arrayOfFarmers'}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
   
-  console.log(`GET /farmers endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /farmers endpoint was called from ip ${req.ip}`)
     const response = await fetch(farmersUrl, {
       method: "GET",
       headers: {
@@ -46,8 +47,8 @@ router.get('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUse
   // #swagger.responses[400] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid ID format": {value: {message: "Id is incorrect"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
   
-  console.log(`GET /farmers/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /farmers/${req.params.id} endpoint was called from ip ${req.ip}`)
     const response = await fetch(farmersUrl+"/"+req.params.id, {
       method: "GET",
       headers: {
@@ -84,8 +85,8 @@ router.post('/', async (req: Request, res: Response): Promise<any> => {
   // #swagger.responses[409] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Already exists": {value: {message: "Email already exists"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
   
-  console.log(`POST /farmers endpoint was called`);
   try {
+    publishToQueueAuditLogs(`POST /farmers endpoint was called from ip ${req.ip}`)
     const response = await fetch(farmersUrl, {
       method: "POST",
       headers: {
@@ -125,8 +126,8 @@ router.put('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER]), asyn
   // #swagger.responses[400] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid ID format": {value: {message: "Id is incorrect"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
   
-  console.log(`PUT /farmers/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`PUT /farmers/${req.params.id} endpoint was called from ip ${req.ip}`)
     const response = await fetch(farmersUrl+"/"+req.params.id, {
       method: "PUT",
       headers: {
@@ -156,8 +157,8 @@ router.delete('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER]), a
   // #swagger.responses[400] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid ID format": {value: {message: "Id is incorrect"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
 
-  console.log(`DELETE /farmers/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`DELETE /farmers/${req.params.id} endpoint was called from ip ${req.ip}`)
     const response = await fetch(farmersUrl+"/"+req.params.id, {
       method: "DELETE",
       headers: {
@@ -201,8 +202,8 @@ router.post('/login', async (req: Request, res: Response): Promise<any> => {
   // #swagger.responses[401] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {"Invalid credentials": {value: {message: "Invalid email or password"}}}}}}
   // #swagger.responses[500] = {content: {"application/json": {schema: {$ref: '#/components/schemas/error'}, examples: {example1: {$ref: '#/components/examples/error500'}}}}}
 
-  console.log(`POST /farmers/login endpoint was called`);
   try {
+    publishToQueueAuditLogs(`POST /farmers/login endpoint was called from ip ${req.ip}`)
     const response = await fetch(farmersUrl+"/login", {
       method: "POST",
       headers: {

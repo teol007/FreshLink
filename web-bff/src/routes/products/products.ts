@@ -4,6 +4,7 @@ import { JwtUserRole } from "../../modules/interfaces/jwtPayload";
 import { productsClient } from "../../modules/clients/productsOfferingService/productsOfferingGrpc";
 import * as grpc from '@grpc/grpc-js';
 import { manageUsersBaseUrl } from "../../modules/config";
+import { publishToQueueAuditLogs } from "../../modules/clients/orderProductsService/orderProductsRabbitMQ";
 
 const router = Router();
 
@@ -12,8 +13,8 @@ router.get('/', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUserRo
   // #swagger.tags = ["Products"]
   // #swagger.responses[200] = { description: "Successful response"}
 
-  console.log(`GET /products endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /products endpoint was called from ip ${req.ip}`);
     const products = await new Promise<any[]>((resolve, reject) => {
       productsClient.getAllProducts({}, (err: any, response: any) => {
         if (err) return reject(err);
@@ -34,8 +35,8 @@ router.get('/allInfo', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, Jw
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[503]
 
-  console.log(`GET /products/allInfo endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /products/allInfo endpoint was called from ip ${req.ip}`);
     const usersBaseUrl = `${manageUsersBaseUrl}`;
     const farmerResponse = await fetch(usersBaseUrl+"/farmers", {
       method: "GET",
@@ -83,8 +84,8 @@ router.get('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUse
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[404]
 
-  console.log(`GET /products/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`GET /products/${req.params.id} endpoint was called from ip ${req.ip}`);
     const product = await new Promise<any>((resolve, reject) => {
       productsClient.getProduct({ id: req.params.id }, (err: any, response: any) => {
         if (err) {
@@ -137,8 +138,8 @@ router.post('/', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, JwtUserR
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[409]
 
-  console.log(`POST /products endpoint was called`);
   try {
+    publishToQueueAuditLogs(`POST /products endpoint was called from ip ${req.ip}`);
     const body = req.body;
     const product = await new Promise<any>((resolve, reject) => {
       productsClient.addProduct({ ...body }, (err: any, response: any) => {
@@ -193,8 +194,8 @@ router.put('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER]), asyn
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[404]
 
-  console.log(`PUT /products/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`PUT /products/${req.params.id} endpoint was called from ip ${req.ip}`);
     const body = req.body;
     const product = await new Promise<any>((resolve, reject) => {
       productsClient.updateProduct({ ...body, id: req.params.id}, (err: any, response: any) => {
@@ -231,8 +232,8 @@ router.delete('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, Jwt
   // #swagger.responses[200] = { description: "Successful response"}
   // #swagger.responses[404]
 
-  console.log(`DELETE /products/${req.params.id} endpoint was called`);
   try {
+    publishToQueueAuditLogs(`DELETE /products/${req.params.id} endpoint was called from ip ${req.ip}`);
     const product = await new Promise<any>((resolve, reject) => {
       productsClient.deleteProduct({ id: req.params.id }, (err: any, response: any) => {
         if (err) {
@@ -260,6 +261,5 @@ router.delete('/:id', authorizeRoles([JwtUserRole.ADMIN, JwtUserRole.FARMER, Jwt
     res.status(typedErr.status || 500).json({ message: typedErr.message });
   }
 });
-
 
 export default router;
