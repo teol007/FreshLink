@@ -1,0 +1,33 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-portal-mf
+  name: ita-portal-mf
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-portal-mf
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-portal-mf
+    spec:
+      containers:
+        - image: ' '
+          name: ita-portal-mf
+          ports:
+            - containerPort: 3010
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-portal-mf
+        from:
+          kind: ImageStreamTag
+          name: ita-portal-mf:dev
+      type: ImageChange

@@ -1,0 +1,52 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-products-offering-db
+  name: ita-products-offering-db
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-products-offering-db
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-products-offering-db
+    spec:
+      containers:
+        - env:
+            - name: MYSQL_DATABASE
+              value: ita_products_offering
+            - name: MYSQL_ROOT_PASSWORD
+              value: password
+          image: ' '
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+                - -u
+                - root
+                - -p
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: ita-products-offering-db
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-products-offering-db
+        from:
+          kind: ImageStreamTag
+          name: ita-products-offering-db:8
+      type: ImageChange

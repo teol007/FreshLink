@@ -1,0 +1,33 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-products-offering-mf
+  name: ita-products-offering-mf
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-products-offering-mf
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-products-offering-mf
+    spec:
+      containers:
+        - image: ' '
+          name: ita-products-offering-mf
+          ports:
+            - containerPort: 3012
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-products-offering-mf
+        from:
+          kind: ImageStreamTag
+          name: ita-products-offering-mf:dev
+      type: ImageChange

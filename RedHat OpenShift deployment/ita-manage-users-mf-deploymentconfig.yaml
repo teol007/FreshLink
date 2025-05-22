@@ -1,0 +1,33 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-manage-users-mf
+  name: ita-manage-users-mf
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-manage-users-mf
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-manage-users-mf
+    spec:
+      containers:
+        - image: ' '
+          name: ita-manage-users-mf
+          ports:
+            - containerPort: 3011
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-manage-users-mf
+        from:
+          kind: ImageStreamTag
+          name: ita-manage-users-mf:dev
+      type: ImageChange

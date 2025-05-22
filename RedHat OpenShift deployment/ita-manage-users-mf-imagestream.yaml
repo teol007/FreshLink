@@ -1,0 +1,16 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    io.kompose.service: ita-manage-users-mf
+  name: ita-manage-users-mf
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - from:
+        kind: DockerImage
+        name: shipjustdocked/ita-manage-users-mf:dev
+      name: dev
+      referencePolicy:
+        type: ""

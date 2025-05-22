@@ -1,0 +1,50 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-web-bff
+  name: ita-web-bff
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-web-bff
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-web-bff
+    spec:
+      containers:
+        - env:
+            - name: WBFF_AUDIT_LOG_MSQUEUE_NAME
+              value: audit_logs
+            - name: WBFF_BASE_URL
+              value: http://localhost:3002
+            - name: WBFF_CORS_ALLOW_URL
+              value: http://localhost:5173
+            - name: WBFF_MANAGE_USERS_SERVICE_BASE_URL
+              value: http://ita-manage-users-service:3001
+            - name: WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_NAME
+              value: orders
+            - name: WBFF_ORDER_PRODUCTS_SERVICE_MSQUEUE_URL
+              value: rabbitmq
+            - name: WBFF_ORDER_PRODUCTS_SERVICE_REST_BASE_URL
+              value: http://ita-order-products:5000
+            - name: WBFF_PRODUCTS_OFFERING_SERVICE_BASE_URL
+              value: ita-products-offering-service:9000
+          image: ' '
+          name: ita-web-bff
+          ports:
+            - containerPort: 3002
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-web-bff
+        from:
+          kind: ImageStreamTag
+          name: ita-web-bff:dev
+      type: ImageChange

@@ -1,0 +1,16 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    io.kompose.service: ita-mobile-bff
+  name: ita-mobile-bff
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - from:
+        kind: DockerImage
+        name: shipjustdocked/ita-mobile-bff:dev
+      name: dev
+      referencePolicy:
+        type: ""

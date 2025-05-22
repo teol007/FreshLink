@@ -1,0 +1,33 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-order-products-db
+  name: ita-order-products-db
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-order-products-db
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-order-products-db
+    spec:
+      containers:
+        - image: ' '
+          name: ita-order-products-db
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-order-products-db
+        from:
+          kind: ImageStreamTag
+          name: ita-order-products-db:latest
+      type: ImageChange

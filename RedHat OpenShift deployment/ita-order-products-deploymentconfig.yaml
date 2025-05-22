@@ -1,0 +1,38 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-order-products
+  name: ita-order-products
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-order-products
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-order-products
+    spec:
+      containers:
+        - env:
+            - name: OPS_MESSAGE_QUEUE_URL
+              value: rabbitmq
+            - name: OPS_MONGODB_URL
+              value: mongodb://ita-order-products-db:27017
+          image: ' '
+          name: ita-order-products
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-order-products
+        from:
+          kind: ImageStreamTag
+          name: ita-order-products:dev
+      type: ImageChange

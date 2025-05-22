@@ -1,0 +1,40 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-products-offering-service
+  name: ita-products-offering-service
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-products-offering-service
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-products-offering-service
+    spec:
+      containers:
+        - env:
+            - name: DB_JDBC_URL
+              value: jdbc:mysql://ita-products-offering-db:3306/ita_products_offering
+            - name: DB_PASSWORD
+              value: password
+            - name: DB_USERNAME
+              value: root
+          image: ' '
+          name: ita-products-offering-service
+          ports:
+            - containerPort: 9000
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-products-offering-service
+        from:
+          kind: ImageStreamTag
+          name: ita-products-offering-service:dev
+      type: ImageChange

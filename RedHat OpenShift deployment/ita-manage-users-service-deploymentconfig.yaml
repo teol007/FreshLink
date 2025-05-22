@@ -1,0 +1,40 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  labels:
+    io.kompose.service: ita-manage-users-service
+  name: ita-manage-users-service
+spec:
+  replicas: 1
+  selector:
+    io.kompose.service: ita-manage-users-service
+  template:
+    metadata:
+      labels:
+        io.kompose.service: ita-manage-users-service
+    spec:
+      containers:
+        - env:
+            - name: UMS_BASE_URL
+              value: http://localhost:3001
+            - name: UMS_JWT_SECRET_KEY
+              value: exampleSecretKey123
+            - name: UMS_MONGODB_URL
+              value: mongodb://root:password@ita-manage-users-db:27017
+          image: ' '
+          name: ita-manage-users
+          ports:
+            - containerPort: 3001
+              protocol: TCP
+      restartPolicy: Always
+  test: false
+  triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+          - ita-manage-users
+        from:
+          kind: ImageStreamTag
+          name: ita-manage-users-service:dev
+      type: ImageChange

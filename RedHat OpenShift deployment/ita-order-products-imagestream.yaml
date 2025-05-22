@@ -1,0 +1,16 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    io.kompose.service: ita-order-products
+  name: ita-order-products
+spec:
+  lookupPolicy:
+    local: false
+  tags:
+    - from:
+        kind: DockerImage
+        name: shipjustdocked/ita-order-products:dev
+      name: dev
+      referencePolicy:
+        type: ""
